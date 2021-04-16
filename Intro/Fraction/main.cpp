@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 using namespace std;
 using std::cin;
 using std::cout;
@@ -9,6 +9,9 @@ using std::endl;
 class Fraction;
 Fraction operator*(Fraction left, Fraction right);
 Fraction operator/(Fraction left, Fraction right);
+
+
+#define DEBUG
 
 class Fraction
 {
@@ -42,26 +45,36 @@ public:
 		this->denominator = denominator;
 	}
 	
-	Fraction()
+	Fraction(): integer(0), numerator(0), denominator(1)
 	{
-		this->integer = 0;
+		/*this->integer = 0;
 		this->numerator = 0;
-		this->denominator = 1;
+		this->denominator = 1;*/
 #ifdef DEBUG
 		cout << "DefConstructor: " << this << endl;
 #endif // DEBUG
 
 	}
 
-	Fraction(int integer)
+	explicit Fraction(int integer):integer(integer), numerator(0), denominator(1)
 	{
-		this->integer = integer;
+		/*this->integer = integer;
 		this->numerator = 0;
-		this->denominator = 1;
+		this->denominator = 1;*/
 #ifdef DEBUG
 		cout << "SingleArgConstructor: " << this << endl;
 #endif // DEBUG
 
+	}
+
+	Fraction(double decimal)
+	{
+		decimal += 1e-15;
+		integer = decimal;
+		decimal -= integer;
+		denominator = 1000000000;
+		numerator = decimal * denominator;
+		reduce();
 	}
 
 	Fraction(int numerator, int denominator)
@@ -206,6 +219,18 @@ public:
 		return old;
 	}
 
+	//Type casr operators
+
+	operator int()const
+	{
+		return integer;
+	}
+
+	explicit operator double()const
+	{
+		return (integer+ numerator / (double)denominator);
+	}
+
 };
 Fraction operator*(Fraction left, Fraction right)
 {
@@ -304,11 +329,13 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 }
 
 //#define CONSTRUCTORS_CHECK
-#define delimiter "n\------------------------------\n"
+#define delimiter "\n------------------------------\n"
 //#define ARITHMET_OPERATORS
 //#define COMPAUND
 //#define IN/DE
 //#define SRAVNENIE
+#define PREOBRAZOVANIE
+
 void main()
 {
 #ifdef CONSTRUCTORS_CHECK
@@ -373,6 +400,21 @@ void main()
 	cout << A << endl;
 	cout << B << endl;
 #endif
+
+#ifdef PREOBRAZOVANIE
+	
+	/*Fraction A(8);//explicit constructor можно вызвать только так, и невозиожно вызвать оператором  //From int to Fraction
+	cout << A << endl;
+	A = (Fraction)8;
+	Fraction B(3, 4, 5);
+	double b=(double) B;
+	cout << delimiter;
+	cout << b << endl;*/
+	Fraction C = 2.55;
+	cout << C << endl;
+
+#endif
+
 
 
 }
