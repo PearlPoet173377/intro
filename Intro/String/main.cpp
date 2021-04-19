@@ -15,95 +15,109 @@ class String
 	char* str;
 	int size;
 public:
-	const char* get_str()const
-	{
-		return str;
-	}
-	char* get_str()
-	{
-		return str;
-	}
-	int get_size()const
-	{
-		return size;
-	}
-
+	const char* get_str()const;
+	char* get_str();
+	int get_size()const;
 	
-	String(int size = 80)
-	{
-		this->size = size;
-		this->str = new char[size] {};
-		cout << "DefConst:\t" << this << endl;
-	}
+	explicit String(int size = 80);
 
-	String(const char* str)
-	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
-		strcpy(this->str, str);
-		cout << "Constructor:\t\t" << this << endl;
-	}
+	String(const char* str);
 
-	String(const String& other)
-	{
-		this->size = other.size;
-		this->str = new char[size] {};
-		strcpy(this->str, other.str);
-		cout << "CopyConstructor:\t" << this << endl;
-	}
+	String(const String& other);
 
-	String(String&& other)
-	{
-		this->size = other.size;
-		this->str = other.str;
-		other.str = nullptr;
-		cout << "MoveConst:\t" << this << endl;
-	}
+	String(String&& other);
 	
-	~String()
-	{
-		delete[] this->str;
-		cout << "Destructor:\t" << this << endl;
-	}
+	~String();
 
 
-	String& operator=(const String& other)
-	{
-		if (this == &other)return *this;
-		delete[] this->str;
-		this->size = other.size;
-		this->str = new char[size] {};
-		strcpy(this->str, other.str);
-		cout << "CopyAssigmentConstructor:\t" << this << endl;
-		return *this;
-	}
+	String& operator=(const String& other);
 
-	/*String(String&& other)
-	{
-		delete[] this->str;
-		this->size = other.size;
-		this->str = other.str;
-		other.str = nullptr;
-		cout << "MoveAssigment:\t" << this << endl;
-		return *this;
-	}*/
+	String& operator+=(const String& other);
 
-	String& operator+=(const String& other)
-	{
-		return *this = *this + other;
-	}
-
-	char& operator[](int index)const
-	{
-		return this->str[index];
-	}
+	char& operator[](int index)const;
 	
-	void print()const
-	{
-		cout << "Size:\t" << size << endl;
-		cout << "Str:\t" << str << endl;
-	}
+	void print()const;
 };
+
+
+const char* String::get_str()const
+{
+	return str;
+}
+char* String::get_str()
+{
+	return str;
+}
+int String::get_size()const
+{
+	return size;
+}
+
+
+String::String(int size) :size(size), str(new char[size] {})
+{
+	/*this->size = size;
+	this->str = new char[size] {};*/
+	cout << (size == 80? "Def": "Size")<<"Const:\t" << this << endl;
+}
+
+String::String(const char* str)
+{
+	this->size = strlen(str) + 1;
+	this->str = new char[size] {};
+	strcpy(this->str, str);
+	cout << "Constructor:\t\t" << this << endl;
+}
+
+String::String(const String& other)
+{
+	this->size = other.size;
+	this->str = new char[size] {};
+	strcpy(this->str, other.str);
+	cout << "CopyConstructor:\t" << this << endl;
+}
+
+String::String(String&& other)
+{
+	this->size = other.size;
+	this->str = other.str;
+	other.str = nullptr;
+	cout << "MoveConst:\t" << this << endl;
+}
+
+String::~String()
+{
+	delete[] this->str;
+	cout << "Destructor:\t" << this << endl;
+}
+
+
+String& String::operator=(const String& other)
+{
+	if (this == &other)return *this;
+	delete[] this->str;
+	this->size = other.size;
+	this->str = new char[size] {};
+	strcpy(this->str, other.str);
+	cout << "CopyAssigmentConstructor:\t" << this << endl;
+	return *this;
+}
+
+String& String::operator+=(const String& other)
+{
+	return *this = *this + other;
+}
+
+char& String::operator[](int index)const
+{
+	return this->str[index];
+}
+
+void String::print()const
+{
+	cout << "Size:\t" << size << endl;
+	cout << "Str:\t" << str << endl;
+}
 
 
 String operator+(const String& left, const String& right)
