@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 using namespace std;
 using std::cin;
@@ -125,7 +125,8 @@ ostream& operator<<(ostream& os, const String& obj)
 
 
 //#define CONSTRUCTORS_CHECK
-#define ASSIGMENT_CHECK
+//#define ASSIGMENT_CHECK
+//#define OPERATOR_PLUS_CHECK
 
 void main()
 {
@@ -158,4 +159,14 @@ void main()
 	/*str1 += str2;
 	cout << str1 << endl;*/
 #endif
+
+#ifdef OPERATOR_PLUS_CHECK
+
+#endif;
+
+	String str1; //defconst
+	String str2();//щбъявляется функ str2 которая ничего не принимает и возращ значение типа String
+	String str3{}; //defconst
+	String str4(5);
+	String str5{ 8 };
 }
