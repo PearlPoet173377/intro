@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{011c1724-dd0b-4f34-acd3-09504a65b550}</ProjectGuid>
-    <RootNamespace>Inharitance</RootNamespace>
+    <ProjectGuid>{52e0d444-f683-40a5-baaa-b5b791f2448a}</ProjectGuid>
+    <RootNamespace>zoo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
