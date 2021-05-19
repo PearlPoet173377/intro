@@ -4,12 +4,25 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+#define delimiter "\n-----------------\n"
+
 class Element
 {
 	int Data; //значение элемента
 	Element* pNext;
 	static int count;//укаазтель на след элемент
 public:
+
+	const Element* getpNext()const
+	{
+		return pNext;
+	}
+
+	int getData()const
+	{
+		return Data;
+	}
+
 	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext)
 	{
 		count++;
@@ -21,21 +34,126 @@ public:
 		//cout << "EDestruc:\t" << this << endl;
 	}
 
+	friend class Iterator;
 	friend class ForwardList;
+	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 int Element::count = 0;
+
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr) :Temp(Temp)
+	{
+		//cout << "IConst:\t" << this << endl;
+	}
+
+	~Iterator()
+	{
+		//cout << "IDectruc:\t" << this << endl;
+	}
+
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+
+	Iterator operator++(int)
+	{
+		Iterator old = *this;
+		Temp = Temp->pNext;
+		return old;
+	}
+
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+
+	const Element* operator->()const
+	{
+		return Temp;
+	}
+
+	Element* operator->()
+	{
+		return Temp;
+	}
+
+	const int& operator*() const
+	{
+		return Temp->Data;
+	}
+
+	int& operator*()
+	{
+		return Temp->Data;
+	}
+};
+
 
 class ForwardList
 {
 	unsigned int size;
 	Element* Head; //указатель на началтный элемент списка
 public:
+	unsigned int get_size() const
+	{
+		return size;
+	}
+	const Element* getHead()const
+	{
+		return Head;
+	}
+
+	Iterator begin()
+	{
+		return Head;
+	}
+
+	Iterator end()
+	{
+		return nullptr;
+	}
+	
 	ForwardList()
 	{
 		this->size = 0;
 		this->Head = nullptr;
 
 		cout << "LConst:\t" << this << endl;
+	}
+
+	ForwardList(std::initializer_list<int> il)
+	{
+		cout << typeid(il.begin()).name() << endl;
+		for (const int* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
+		cout << "ILConst:\t" << this << endl;
+	}
+	
+	ForwardList(const ForwardList& other)
+	{
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		cout << "LCopyConstructor:\t" << this << endl;
+	}
+
+	ForwardList(ForwardList&& other)
+	{
+		this->size = other.size;
+		this->Head = other.Head;
+		other.Head = nullptr;
+		cout << "LMoveConst: " << this << endl;
 	}
 
 	~ForwardList()
@@ -45,8 +163,42 @@ public:
 		cout << "LDestruc:\t" << this << endl;
 	}
 
+
+	//operators
+
+	ForwardList& operator=(const ForwardList& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		cout << "LCopyAssign:\t" << this << endl;
+		return *this;
+	}
+
+	ForwardList& operator=(ForwardList&& other)
+	{
+		while (Head)pop_front();
+		this->size = other.size;
+		this->Head = other.Head;
+		other.Head = nullptr;
+		cout << "LMoveAssign: " << this << endl;
+		return *this;
+	}
+
 	//Adding Elements
 
+	int& operator[](int index)
+	{
+		if (index >= size)throw std::exception("Out of range");
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++)
+		{
+			Temp = Temp->pNext;
+		}
+		return Temp->Data;
+	}
+	
 	void push_front(int Data)
 	{
 		/*Element* New = new Element(Data);
@@ -126,15 +278,27 @@ public:
 			Temp = Temp->pNext;
 		}*/
 		
-		for(Element* Temp=Head;Temp;Temp=Temp->pNext)
-			cout << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << endl;
+		//for(Element* Temp=Head;Temp;/*Temp=Temp->pNext*/Temp++)
+			//cout << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << endl;
+		for (Iterator Temp = Head; Temp != nullptr; Temp++)
+			cout << *Temp << "\t";
+			//cout/*<<Temp<<"\t"*/ << Temp->Data << "\t" << Temp->pNext << endl;
+
 		cout << "In list " << size << " elements\n";
 		cout << "Total count of elements: " << Element::count << endl;
 	}
 
 };
 
+ForwardList operator+(const ForwardList& left, const ForwardList& right)
+{
+	ForwardList cat = left;
+	for (const Element* Temp = right.getHead(); Temp; Temp = Temp->getpNext())
+		cat.push_back(Temp->getData());
+	return cat;
+}
 
+#define HARDCORE
 //#define BASE_CHECK
 #ifdef BASE_CHECK
 //#define ADDING_ELEMENTS
@@ -169,11 +333,73 @@ void main()
 	list2.print();*/
 
 	/*int arr[] = { 3,5,8,13,21 };
-	for (int i = 0; i < sizeof(arr)/sizeof(int); i++)
+	for (int i:arr)
 	{
 		cout << arr[i] << "\t";
 	}*/
 
+	cout << sizeof(Element) << endl;
 	ForwardList list = { 3,5,8,13,21 };
+	for(int i:list)
+	{
+		cout<<i<<"\t";
+	}
+	cout << endl;
+
+	//list.print();
+	/*try
+	{
+
+		for (int i = 0; i < list.get_size(); i++)
+		{
+			list[i] = rand() % 100;
+		}
+		for (int i = 0; i < list.get_size(); i++)
+		{
+			cout << list[i] << "\t";
+		}
+	}
+
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << endl;//метод what()возращ сообщение об ошибке
+	}*/
+
+	/*int n;
+	cout << "Write a size of list: "; cin >> n ;
+	ForwardList list;
+
+	for (int i = 0; i < n; i++)
+	{
+		list.push_back(rand() % 100);
+	}
+	list = list;
 	list.print();
+
+	cout << delimiter;
+
+	//ForwardList list2 = list;
+	ForwardList list2;*/
+
+	/*ForwardList list1;
+	list1.push_back(3); 
+	list1.push_back(5);
+	list1.push_back(8);
+	list1.push_back(13);
+	list1.push_back(15);
+	
+	ForwardList list2;
+	list2.push_back(34);
+	list2.push_back(55);
+	list2.push_back(89);
+	list2.push_back(144);
+	cout << delimiter << endl;
+
+	ForwardList list3;
+	list3 = list1 + list2;
+	list3.print();
+	cout << delimiter << endl;*/
+
+
+
 }
