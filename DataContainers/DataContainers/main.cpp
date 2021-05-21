@@ -13,90 +13,113 @@ class Element
 	static int count;//укаазтель на след элемент
 public:
 
-	const Element* getpNext()const
-	{
-		return pNext;
-	}
-
-	int getData()const
-	{
-		return Data;
-	}
-
-	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext)
-	{
-		count++;
-		//cout << "EConst:\t" << this << endl;
-	}
-	~Element()
-	{
-		count--;
-		//cout << "EDestruc:\t" << this << endl;
-	}
-
+	const Element* getpNext()const;
+	
+	int getData()const;
+	
+	Element(int Data, Element* pNext = nullptr);
+	~Element();
+	
 	friend class Iterator;
 	friend class ForwardList;
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 int Element::count = 0;
 
+const Element* Element::getpNext()const
+{
+	return pNext;
+}
+
+int Element::getData()const
+{
+	return Data;
+}
+
+Element::Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext)
+{
+	count++;
+	//cout << "EConst:\t" << this << endl;
+}
+Element::~Element()
+{
+	count--;
+	//cout << "EDestruc:\t" << this << endl;
+}
+
+
 class Iterator
 {
 	Element* Temp;
 public:
-	Iterator(Element* Temp = nullptr) :Temp(Temp)
-	{
-		//cout << "IConst:\t" << this << endl;
-	}
+	Iterator(Element* Temp = nullptr);
+	~Iterator();
 
-	~Iterator()
-	{
-		//cout << "IDectruc:\t" << this << endl;
-	}
+	Iterator& operator++();
+	Iterator operator++(int);
 
-	Iterator& operator++()
-	{
-		Temp = Temp->pNext;
-		return *this;
-	}
+	bool operator==(const Iterator& other)const;
+	bool operator!=(const Iterator& other)const;
 
-	Iterator operator++(int)
-	{
-		Iterator old = *this;
-		Temp = Temp->pNext;
-		return old;
-	}
+	const Element* operator->()const;
+	Element* operator->();
 
-	bool operator==(const Iterator& other)const
-	{
-		return this->Temp == other.Temp;
-	}
-
-	bool operator!=(const Iterator& other)const
-	{
-		return this->Temp != other.Temp;
-	}
-
-	const Element* operator->()const
-	{
-		return Temp;
-	}
-
-	Element* operator->()
-	{
-		return Temp;
-	}
-
-	const int& operator*() const
-	{
-		return Temp->Data;
-	}
-
-	int& operator*()
-	{
-		return Temp->Data;
-	}
+	const int& operator*() const;
+	int& operator*();
 };
+
+Iterator::Iterator(Element* Temp = nullptr) :Temp(Temp)
+{
+	//cout << "IConst:\t" << this << endl;
+}
+
+Iterator::~Iterator()
+{
+	//cout << "IDectruc:\t" << this << endl;
+}
+
+Iterator& Iterator::operator++()
+{
+	Temp = Temp->pNext;
+	return *this;
+}
+
+Iterator Iterator::operator++(int)
+{
+	Iterator old = *this;
+	Temp = Temp->pNext;
+	return old;
+}
+
+bool Iterator::operator==(const Iterator& other)const
+{
+	return this->Temp == other.Temp;
+}
+
+bool Iterator::operator!=(const Iterator& other)const
+{
+	return this->Temp != other.Temp;
+}
+
+const Element* Iterator::operator->()const
+{
+	return Temp;
+}
+
+Element* Iterator::operator->()
+{
+	return Temp;
+}
+
+const int& Iterator::operator*() const
+{
+	return Temp->Data;
+}
+
+int& Iterator::operator*()
+{
+	return Temp->Data;
+}
 
 
 class ForwardList
