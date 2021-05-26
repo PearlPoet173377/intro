@@ -138,7 +138,7 @@ void main()
 	list3.print();
 	cout << delimiter << endl;*/
 
-	ForwardList<double> dfl = { 2.5, 2.87, 3.14, 5.9, 8.2 };
+	ForwardList<double> dfl = {3.14, 2.5, 2.87, 3.14, 5.9, 8.2 };
 	for (double i : dfl)cout << i << "\t"; cout << endl;
 
 
