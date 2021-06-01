@@ -3,6 +3,8 @@ using namespace std;
 using std::cin;
 using std::cout;
 using std::endl;
+#define tab "\t"
+#define delimiter "\n---------------------\n"
 
 class List
 {
@@ -113,6 +115,45 @@ public:
 	{
 		return nullptr;
 	}
+
+
+	class Reverse_Iterator
+	{
+		Element* Temp;
+
+	public:
+		Reverse_Iterator(Element* Temp = nullptr) :Temp(Temp)
+		{
+			cout << "RITConst:\t" << this << endl;
+		}
+
+		~Reverse_Iterator()
+		{
+			cout << "RITDestruc:\t" << this << endl;
+		}
+		
+	};
+
+	const Reverse_Iterator rbegin()const
+	{
+		return nullptr;
+	}
+
+	Reverse_Iterator rbegin()
+	{
+		return nullptr;
+	}
+
+	const Reverse_Iterator rend()const
+	{
+		return Head;
+	}
+
+	Reverse_Iterator rend()
+	{
+		return Head;
+	}
+
 
 	List()
 	{
@@ -338,25 +379,88 @@ List operator+(const List& left, const List& right)
 	return cat;
 }
 
+
+//#define BASE_CHECK
+//#define COPY_METHODS_CHECK
+//#define OPERATOR_PLUS_CHECK
+#define ITERATOR_CHECK
+
 void main()
 {
-	/*int n;
-	cout << "Write size of list: "; cin >> n;
+	setlocale(LC_ALL, "");
+#ifdef BASE_CHECK
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
 	List list;
 	for (int i = 0; i < n; i++)
 	{
+		//list.push_front(rand() % 100);
 		list.push_back(rand() % 100);
 	}
 	list.print();
-	list.pop_back();
-	list.print();*/
+	/*list.print_reverse();
+	list.pop_front();
+	list.print();
+	list.print_reverse();*/
 
-	/*List list;
-	list.push_back(3);
-	list.push_back(3);
-	list.push_back(3);
-	list = list;*/
+	int index;
+	int value;
+	cout << "Введите индекс добавляемого элемента: "; cin >> index;
+	cout << "Введите значение добавляемого элемента: "; cin >> value;
+	list.insert(index, value);
+	list.print();
+	list.print_reverse();
+	cout << "Введите индекс удаляемого элемента: "; cin >> index;
+	list.erase(index);
+	list.print();
+	list.print_reverse();
+#endif // BASE_CHECK
 
+#ifdef COPY_METHODS_CHECK
+	List list;
+	list.push_back(3);
+	list.push_back(5);
+	list.push_back(8);
+	list.push_back(13);
+	list.push_back(21);
+	list = list;
+	//list.print();
+	List list2 = list;	//CopyConstructor
+	list2.print();
+	list2.print_reverse();
 
+	List list3;
+	list3 = list2;		//CopyAssignment
+	list3.print();
+	list3.print_reverse();
+#endif // COPY_METHODS_CHECK
+
+#ifdef OPERATOR_PLUS_CHECK
+	List list1 = { 3, 5, 8, 13, 21 };
+	//list1.print();
+	//list1.print_reverse();
+	List list2 = { 34,55,89 };
+	cout << delimiter << endl;
+	//List list3 = list1 + list2;	//MoveConstructor
+	List list3;
+	list3 = list1 + list2;			//MoveAssignment
+	cout << delimiter << endl;
+	list3.print();
+	list3.print_reverse();
+#endif // OPERATOR_PLUS_CHECK
+
+#ifdef ITERATOR_CHECK
+	List list = { 3,5,8,13,21 };
+	for (int i : list)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+	for (List::Iterator it = list.begin(); it != list.end(); it++)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+#endif // ITERATOR_CHECK
 
 }
