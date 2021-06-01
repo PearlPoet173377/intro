@@ -78,7 +78,7 @@ public:
 			return this->Temp == other.Temp;
 		}
 		
-		bool operator==(const Iterator& other)const
+		bool operator!=(const Iterator& other)const
 		{
 			return this->Temp != other.Temp;
 		}
@@ -331,7 +331,7 @@ List operator+(const List& left, const List& right)
 	List cat = left;
 	/*for (List::Element* Temp = right.Head; Temp; Temp = Temp->pNext)
 		cat.push_back(Temp->Data);*/
-	for (List::Iterator it = right.begin(); it != nullptr; it++)
+	for (List::Iterator it = right.begin(); it != right.end(); it++)
 	{
 		cat.push_back(*it);
 	}
