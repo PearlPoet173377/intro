@@ -131,6 +131,52 @@ public:
 		{
 			cout << "RITDestruc:\t" << this << endl;
 		}
+
+		Reverse_Iterator& operator++()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+
+		Reverse_Iterator operator++(int)
+		{
+			Reverse_Iterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+
+		Reverse_Iterator& operator--()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+
+		Reverse_Iterator operator--(int)
+		{
+			Reverse_Iterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+
+		bool operator==(const Reverse_Iterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+
+		bool operator!=(const Reverse_Iterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+
+		int& operator*()
+		{
+			return Temp->Data;
+		}
 		
 	};
 
